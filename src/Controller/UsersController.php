@@ -11,11 +11,13 @@ use App\Controller\AppController;
 class UsersController extends AppController
 {
 
+    // initialize controller
     public function initialize() {
 	parent::initialize();
 	$this -> Auth -> allow(['logout', 'add']);
     }
 
+    // logout user
     public function logout() {
 	$this -> Flash -> success('You are now logged out.');
 	return $this -> redirect($this -> Auth -> logout());
@@ -116,6 +118,7 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    // user login
     public function login() {
 	if ($this -> request -> is('post')) {
 		$user = $this -> Auth -> identify();

@@ -11,6 +11,31 @@ use App\Controller\AppController;
 class BookmarksController extends AppController
 {
 
+    public function isAuthorized($user) {
+	$action = $this -> request -> params['action'];
+
+	// always allow certain actions
+	if (in_array($action, ['index', 'add', 'tags'])) {
+		return true;
+	}
+
+	// require an id for any actions not listed above
+	if (empty($this -> request -> params['pass'][0])) {
+		return false;
+	}
+
+	// check that the bookmark belongs to current user
+	$id = $this -> request -> params['pass'][0];
+	$bookmark = $this -> Bookmarks -> get($id);
+
+	if ($bookmark -> user_id == $user['id']) {
+		return true;
+	}
+
+	return parent::isAuthorized($user);
+    }
+
+    // create bookmarks and tags for views
     public function tags() {
 	$tags = $this -> request -> params['pass'];
 
